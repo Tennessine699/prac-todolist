@@ -2,24 +2,49 @@
     <div>
       <div>ItemList</div>
       <div v-for="item in items" :key="item.name">
-        <div class="item">
+        <div class="item" :class="{ over500: item.price >= 500 }">
           <div class="name">名前: {{ item.name }}</div>
           <div class="price">{{ item.price }} 円</div>
+          <div v-if="item.price >= 10000">▲高額商品▲</div>
         </div>
       </div>
+      <div>
+        <label>
+          課題名
+          <input v-model="newItemName" type="text" />
+        </label>
+        <label>
+          期限(YYYYMMDD)
+          <input v-model="newItemPrice" type="number" />
+        </label>
+        <button @click="addItem">add</button>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  import { ref } from "vue";
-  
-  export default {
+</template>
+
+<script>
+import { ref } from "vue";
+ 
+export default {
     setup() {
       const items = ref([
         { name: "たまご", price: 100 },
         { name: "りんご", price: 160 },
       ]);
-      return { items };
+      const newItemName = ref("");
+      const newItemPrice = ref(20210601);
+
+      const addItem = () => {
+        items.value.push({ name: newItemName.value, price: newItemPrice.value });
+      };
+
+    return { items, newItemName, newItemPrice, addItem };
     },
-  };
-  </script>
+};
+</script>
+
+<style>
+.over500 {
+  color: red;
+}
+</style>
